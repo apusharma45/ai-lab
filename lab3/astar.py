@@ -49,3 +49,8 @@ grid = [
     [1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1],  
     [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0]   
 ]
+
+start = (6, 0)   
+goal = (0, 11)   
+path = a_star(grid, start, goal)
+print(path)
