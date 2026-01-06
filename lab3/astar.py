@@ -1,27 +1,30 @@
 import heapq
 
-def heuristic(a, b):
+def h(a, b):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 def a_star(grid, start, goal):
     rows, cols = len(grid), len(grid[0])
 
-    open_set = []
-    heapq.heappush(open_set, (0, start))
+    pq = []
+    heapq.heappush(pq, (0, start))
 
     g_cost = {start: 0}
     parent = {start: None}
 
     directions = [(0,1),(1,0),(0,-1),(-1,0)]
+    explored_count = 0
 
-    while open_set:
-        _, current = heapq.heappop(open_set)
+    while pq:
+        _, current = heapq.heappop(pq)
+        explored_count+=1
 
         if current == goal:
             path = []
             while current:
                 path.append(current)
                 current = parent[current]
+            print(explored_count)
             return path[::-1]
 
         for dx, dy in directions:
@@ -33,22 +36,22 @@ def a_star(grid, start, goal):
 
                 if neighbor not in g_cost or new_g < g_cost[neighbor]:
                     g_cost[neighbor] = new_g
-                    f = new_g + heuristic(neighbor, goal)
-                    heapq.heappush(open_set, (f, neighbor))
+                    f = new_g + h(neighbor, goal)
+                    heapq.heappush(pq, (f, neighbor))
                     parent[neighbor] = current
 
     return None
 
-
 grid = [
-    [0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 0],  
-    [0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0],  
-    [0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 0],  
-    [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0],  
-    [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0],  
-    [1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1],  
-    [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0]   
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # row 0 (B at col 11)
+    [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    [1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 1, 0],
+    [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0],
+    [1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0]   # row 6 (A at col 0)
 ]
+
 
 start = (6, 0)   
 goal = (0, 11)   
